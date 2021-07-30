@@ -16,12 +16,12 @@
   justify-content: space-between;
   align-items:center;
 }
-.user-name a{
+.header-name a{
   color: #FAFAFA;
   font-size: 16px;
   text-decoration: none;
 }
-.chat-create a{
+.create-room a{
   padding: 14px;
   color: deepskyblue;
   font-size: 10px;

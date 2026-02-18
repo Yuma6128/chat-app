@@ -1,0 +1,52 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>イベントを編集</h1>
+  </div>
+
+  <%= form_with model: @event, url: event_path(@event), method: :patch, local: true do |f| %>
+    <% if @event.errors.any? %>
+      <div class="alert alert-error">
+        <% @event.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :title, 'イベント名 *' %>
+      <%= f.text_field :title, class: 'form-control' %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :event_date, '開催日 *' %>
+        <%= f.date_field :event_date, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :category, 'カテゴリ' %>
+        <%= f.select :category,
+            Event::CATEGORIES.map { |k, v| [v, k] },
+            {},
+            class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :status, 'ステータス' %>
+      <%= f.select :status,
+          Event::STATUSES.map { |k, v| [v, k] },
+          {},
+          class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description, '概要・メモ' %>
+      <%= f.text_area :description, class: 'form-control', rows: 4 %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit '更新する', class: 'btn btn-primary btn-lg' %>
+      <%= link_to 'キャンセル', event_path(@event), class: 'btn btn-outline btn-lg' %>
+    </div>
+  <% end %>
+</div>

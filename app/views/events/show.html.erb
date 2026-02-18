@@ -1,0 +1,146 @@
+<div class="event-detail-container">
+
+  <!-- パンくず -->
+  <div class="breadcrumb">
+    <%= link_to 'ダッシュボード', dashboard_path %> &gt;
+    <%= link_to '年間カレンダー', events_path %> &gt;
+    <%= @event.title %>
+  </div>
+
+  <div class="event-detail-header">
+    <div class="event-detail-meta">
+      <span class="event-category-tag large"><%= @event.category_label %></span>
+      <span class="event-status-tag status-<%= @event.status %>"><%= @event.status_label %></span>
+    </div>
+    <h1 class="event-detail-title"><%= @event.title %></h1>
+    <div class="event-detail-date">
+      <strong>開催日:</strong> <%= @event.event_date.strftime('%Y年%m月%d日 (%a)') %>
+      <span class="days-until-badge days-<%= @event.urgency_level %>">
+        <% d = @event.days_until %>
+        <%= d == 0 ? '本日！' : d > 0 ? "あと#{d}日" : "#{d.abs}日前に終了" %>
+      </span>
+    </div>
+    <% if @event.description.present? %>
+      <p class="event-description"><%= @event.description %></p>
+    <% end %>
+    <div class="event-detail-actions">
+      <%= link_to '編集', edit_event_path(@event), class: 'btn btn-outline' %>
+      <%= link_to '削除', event_path(@event),
+          data: { turbo_method: :delete, turbo_confirm: 'このイベントとすべてのタスクを削除しますか？' },
+          class: 'btn btn-danger' %>
+    </div>
+  </div>
+
+  <!-- タスク進捗バー -->
+  <% total = @tasks.count %>
+  <% done  = @completed_tasks.count %>
+  <div class="progress-section card">
+    <div class="progress-header">
+      <h3>タスク進捗</h3>
+      <span class="progress-numbers"><%= done %>/<%= total %>完了</span>
+    </div>
+    <div class="progress-bar large">
+      <div class="progress-fill" style="width: <%= total > 0 ? (done * 100 / total) : 0 %>%"></div>
+    </div>
+    <% if total > 0 && done == total %>
+      <p class="all-done-msg">すべてのタスクが完了しています！</p>
+    <% end %>
+  </div>
+
+  <div class="tasks-grid">
+
+    <!-- 未完了タスク -->
+    <section class="card">
+      <div class="card-header">
+        <h2>残りタスク (<%= @pending_tasks.count %>)</h2>
+        <button class="btn btn-sm btn-outline" onclick="document.getElementById('new-task-form').classList.toggle('hidden')">
+          + タスク追加
+        </button>
+      </div>
+
+      <div id="new-task-form" class="new-task-form hidden">
+        <%= form_with url: event_tasks_path(@event), method: :post, local: true do |f| %>
+          <div class="form-group">
+            <%= f.text_field :title, placeholder: 'タスク名', class: 'form-control', required: true %>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <%= f.date_field :due_date, class: 'form-control' %>
+              <label>期限日</label>
+            </div>
+            <div class="form-group">
+              <%= f.select :priority, [['高', 1], ['中', 2], ['低', 3]], {}, class: 'form-control' %>
+              <label>優先度</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.text_area :description, placeholder: 'メモ（任意）', class: 'form-control', rows: 2 %>
+          </div>
+          <%= f.submit 'タスクを追加', class: 'btn btn-primary btn-sm' %>
+        <% end %>
+      </div>
+
+      <% if @pending_tasks.present? %>
+        <ul class="task-list">
+          <% @pending_tasks.order(:priority, :due_date).each do |task| %>
+            <li class="task-item urgency-<%= task.urgency_level %>">
+              <div class="task-item-left">
+                <%= link_to '', toggle_status_event_task_path(@event, task),
+                    data: { turbo_method: :patch },
+                    class: "task-checkbox #{task.status == 'completed' ? 'checked' : ''}",
+                    title: task.status == 'completed' ? '未完了に戻す' : '完了にする' %>
+                <div class="task-item-body">
+                  <span class="task-title"><%= task.title %></span>
+                  <div class="task-meta">
+                    <span class="priority-badge priority-<%= task.priority %>"><%= task.priority_label %>優先度</span>
+                    <% if task.due_date %>
+                      <span class="due-date <%= task.overdue? ? 'overdue' : '' %>">
+                        期限: <%= task.due_date.strftime('%m/%d') %>
+                        <% d = task.days_until_due %>
+                        (<%= d == 0 ? '本日' : d > 0 ? "あと#{d}日" : "#{d.abs}日超過" %>)
+                      </span>
+                    <% end %>
+                    <% if task.auto_generated %>
+                      <span class="auto-tag">AI生成</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <div class="task-item-actions">
+                <%= link_to '編集', edit_event_task_path(@event, task), class: 'btn btn-xs btn-outline' %>
+                <%= link_to '削除', event_task_path(@event, task),
+                    data: { turbo_method: :delete, turbo_confirm: '削除しますか？' },
+                    class: 'btn btn-xs btn-danger' %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="empty-msg">すべてのタスクが完了しています！</p>
+      <% end %>
+    </section>
+
+    <!-- 完了タスク -->
+    <% if @completed_tasks.present? %>
+    <section class="card completed-tasks-section">
+      <h2 class="card-title">完了したタスク (<%= @completed_tasks.count %>)</h2>
+      <ul class="task-list">
+        <% @completed_tasks.each do |task| %>
+          <li class="task-item completed">
+            <div class="task-item-left">
+              <%= link_to '', toggle_status_event_task_path(@event, task),
+                  data: { turbo_method: :patch },
+                  class: 'task-checkbox checked', title: '未完了に戻す' %>
+              <div class="task-item-body">
+                <span class="task-title done"><%= task.title %></span>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+    <% end %>
+
+  </div>
+
+</div>

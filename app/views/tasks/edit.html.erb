@@ -1,0 +1,46 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>タスクを編集</h1>
+    <p><%= @event.title %></p>
+  </div>
+
+  <%= form_with model: [@event, @task], url: event_task_path(@event, @task), method: :patch, local: true do |f| %>
+    <% if @task.errors.any? %>
+      <div class="alert alert-error">
+        <% @task.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :title, 'タスク名 *' %>
+      <%= f.text_field :title, class: 'form-control' %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :due_date, '期限日' %>
+        <%= f.date_field :due_date, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :priority, '優先度' %>
+        <%= f.select :priority, [['高', 1], ['中', 2], ['低', 3]], {}, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :status, 'ステータス' %>
+        <%= f.select :status, Task::STATUSES.map { |k, v| [v, k] }, {}, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description, 'メモ' %>
+      <%= f.text_area :description, class: 'form-control', rows: 3 %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit '更新する', class: 'btn btn-primary' %>
+      <%= link_to 'キャンセル', event_path(@event), class: 'btn btn-outline' %>
+    </div>
+  <% end %>
+</div>

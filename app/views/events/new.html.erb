@@ -1,0 +1,88 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>新しいイベントを登録</h1>
+    <p>イベントを登録すると、AIが自動でタスクリストを生成します。</p>
+  </div>
+
+  <%= form_with model: @event, url: events_path, method: :post, local: true do |f| %>
+    <% if @event.errors.any? %>
+      <div class="alert alert-error">
+        <% @event.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :title, 'イベント名 *' %>
+      <%= f.text_field :title, class: 'form-control', placeholder: '例: 春の新製品ローンチキャンペーン' %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :event_date, '開催日 *' %>
+        <%= f.date_field :event_date, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :category, 'カテゴリ *' %>
+        <%= f.select :category,
+            Event::CATEGORIES.map { |k, v| [v, k] },
+            { prompt: 'カテゴリを選択' },
+            class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description, '概要・メモ' %>
+      <%= f.text_area :description, class: 'form-control', rows: 4,
+          placeholder: 'イベントの目的・ゴール・担当者など自由に記入してください' %>
+    </div>
+
+    <!-- AI自動タスク生成オプション -->
+    <div class="auto-task-option">
+      <label class="checkbox-label">
+        <%= check_box_tag :auto_tasks, '1', true, id: 'auto_tasks' %>
+        <span class="checkbox-custom"></span>
+        <span class="checkbox-text">
+          <strong>AIが標準タスクを自動生成する</strong>
+          <small>カテゴリに合わせた必須タスクと期限を自動で設定します</small>
+        </span>
+      </label>
+    </div>
+
+    <!-- カテゴリ別タスク説明 -->
+    <div class="task-preview-card" id="task-preview">
+      <h3>自動生成されるタスクの例</h3>
+      <div id="task-preview-content">
+        <p class="preview-placeholder">カテゴリを選択するとAIが生成するタスクのプレビューが表示されます</p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit 'イベントを登録する', class: 'btn btn-primary btn-lg' %>
+      <%= link_to 'キャンセル', events_path, class: 'btn btn-outline btn-lg' %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+const taskPreviews = {
+  'campaign': ['ターゲットオーディエンスの定義（60日前）', 'クリエイティブ制作（45日前）', 'メディアプランニング（30日前）', 'LP作成・確認（21日前）', '最終コンテンツ承認（14日前）', '配信テスト（7日前）', 'KPIレポート作成（完了後7日）'],
+  'product_launch': ['プレスリリース原稿作成（45日前）', 'メディアリスト作成（30日前）', 'SNSコンテンツ準備（21日前）', '事前案内・アウトリーチ（14日前）', 'PR配信・メディア対応（7日前）', 'ローンチ後フォローアップ（完了後7日）'],
+  'conference': ['出展申込み確認（60日前）', 'ブース・資料デザイン発注（45日前）', '配布物準備（30日前）', '展示物動作確認（14日前）', '担当者役割確認（7日前）', 'リード・名刺データ化（完了後3日）'],
+  'webinar': ['テーマ・スピーカー確定（30日前）', '告知ページ公開（21日前）', 'SNS告知開始（14日前）', 'リマインドメール配信（7日前）', '資料・デモ最終確認（3日前）', 'アーカイブ公開・フォロー（完了後3日）'],
+  'deadline': ['書類・データ洗い出し（30日前）', '担当者アサイン（21日前）', '初稿作成（14日前）', 'フィードバック反映（7日前）', '最終承認取得（3日前）', '提出完了確認'],
+  'review': ['KPI実績データ収集（14日前）', '前回アクションの進捗確認（7日前）', 'レビュー資料作成（3日前）', '資料事前共有（前日）', '次期アクションまとめ（完了後3日）'],
+  'other': ['事前準備・必要事項確認（14日前）', '関係者への案内・調整（7日前）', '最終確認（前日）']
+};
+
+document.getElementById('event_category').addEventListener('change', function() {
+  const tasks = taskPreviews[this.value];
+  const preview = document.getElementById('task-preview-content');
+  if (tasks) {
+    preview.innerHTML = '<ul class="preview-task-list">' + tasks.map(t => `<li>${t}</li>`).join('') + '</ul>';
+  } else {
+    preview.innerHTML = '<p class="preview-placeholder">カテゴリを選択するとAIが生成するタスクのプレビューが表示されます</p>';
+  }
+});
+</script>

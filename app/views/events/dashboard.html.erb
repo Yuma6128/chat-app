@@ -1,0 +1,140 @@
+<div class="dashboard-container">
+
+  <!-- ヘッダー -->
+  <div class="dashboard-header">
+    <div class="dashboard-title">
+      <h1>AIマーケティング秘書</h1>
+      <p class="dashboard-subtitle"><%= Date.today.strftime('%Y年%m月%d日') %> のブリーフィング</p>
+    </div>
+    <div class="dashboard-actions">
+      <%= link_to '+ イベントを登録', new_event_path, class: 'btn btn-primary' %>
+      <%= link_to '年間カレンダー', events_path, class: 'btn btn-outline' %>
+    </div>
+  </div>
+
+  <!-- AI次のアクションサジェスト -->
+  <% if @next_actions.present? %>
+  <section class="card ai-suggestions">
+    <div class="card-header">
+      <span class="ai-icon">AI</span>
+      <h2>今すぐやるべきこと</h2>
+    </div>
+    <div class="action-list">
+      <% @next_actions.each do |action| %>
+      <div class="action-item action-<%= action[:type] %>">
+        <span class="action-badge badge-<%= action[:type] %>"><%= action[:label] %></span>
+        <span class="action-message"><%= action[:message] %></span>
+        <% if action[:task] %>
+          <%= link_to '完了', toggle_status_event_task_path(action[:task].event, action[:task]), data: { turbo_method: :patch }, class: 'btn btn-xs btn-complete' %>
+        <% elsif action[:event] %>
+          <%= link_to '詳細', event_path(action[:event]), class: 'btn btn-xs btn-detail' %>
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+  </section>
+  <% else %>
+  <section class="card ai-suggestions ai-all-good">
+    <div class="card-header">
+      <span class="ai-icon">AI</span>
+      <h2>今すぐやるべきこと</h2>
+    </div>
+    <p class="all-good-msg">期限が迫っているタスクはありません。このまま計画通りに進めましょう！</p>
+  </section>
+  <% end %>
+
+  <div class="dashboard-grid">
+
+    <!-- 直近イベント -->
+    <section class="card upcoming-events">
+      <h2 class="card-title">直近のイベント</h2>
+      <% if @upcoming_events.present? %>
+        <% @upcoming_events.each do |event| %>
+        <div class="event-card event-urgency-<%= event.urgency_level %>">
+          <div class="event-card-meta">
+            <span class="event-date"><%= event.event_date.strftime('%m/%d') %></span>
+            <span class="event-days-badge days-<%= event.urgency_level %>">
+              <% d = event.days_until %>
+              <%= d == 0 ? '本日' : d < 0 ? "#{d.abs}日前" : "あと#{d}日" %>
+            </span>
+          </div>
+          <div class="event-card-body">
+            <span class="event-category-tag"><%= event.category_label %></span>
+            <%= link_to event.title, event_path(event), class: 'event-title' %>
+          </div>
+          <div class="event-card-tasks">
+            <% pending = event.tasks.active.count %>
+            <% total = event.tasks.count %>
+            <% if total > 0 %>
+              <div class="task-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: <%= total > 0 ? ((total - pending) * 100 / total) : 100 %>%"></div>
+                </div>
+                <span class="progress-label">残り<%= pending %>/<%= total %>タスク</span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      <% else %>
+        <p class="empty-msg">予定されているイベントはありません</p>
+      <% end %>
+      <%= link_to 'すべてのイベントを見る →', events_path, class: 'see-all-link' %>
+    </section>
+
+    <!-- 今月の年間カレンダー概要 -->
+    <section class="card monthly-overview">
+      <h2 class="card-title"><%= Date.today.year %>年 年間スケジュール</h2>
+      <div class="monthly-grid">
+        <% @monthly_summary.each do |summary| %>
+        <div class="month-cell <%= summary[:month] == Date.today.month ? 'current-month' : '' %>">
+          <span class="month-label"><%= summary[:month] %>月</span>
+          <% if summary[:count] > 0 %>
+            <span class="month-event-count"><%= summary[:count] %></span>
+          <% else %>
+            <span class="month-empty">-</span>
+          <% end %>
+        </div>
+        <% end %>
+      </div>
+      <%= link_to '年間カレンダー詳細を見る →', events_path(year: Date.today.year), class: 'see-all-link' %>
+    </section>
+
+  </div>
+
+  <!-- 整理のコツ カード -->
+  <section class="card tips-card">
+    <h2 class="card-title">AIからの整理術アドバイス</h2>
+    <div class="tips-grid">
+      <div class="tip-item">
+        <div class="tip-icon">1</div>
+        <div class="tip-body">
+          <strong>イベントを先に登録する</strong>
+          <p>まず年間の主要イベントをすべて登録しましょう。登録するとAIが自動でタスクリストを生成します。</p>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">2</div>
+        <div class="tip-body">
+          <strong>毎週月曜に「今週やること」を確認</strong>
+          <p>週初めにダッシュボードを開いて「今すぐやるべきこと」セクションを確認する習慣をつけましょう。</p>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">3</div>
+        <div class="tip-body">
+          <strong>60日・30日・14日前が重要</strong>
+          <p>大型イベントは60日前から動き出すのが鉄則。タスクの期限を意識して早めに着手しましょう。</p>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">4</div>
+        <div class="tip-body">
+          <strong>タスク完了をこまめに記録</strong>
+          <p>完了したタスクをその都度チェックすることで、進捗が可視化され次のアクションが明確になります。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,54 @@
+<div class="events-container">
+  <div class="events-header">
+    <h1>年間イベントカレンダー</h1>
+    <div class="year-nav">
+      <%= link_to '< 前年', events_path(year: @year - 1), class: 'btn btn-outline btn-sm' %>
+      <span class="current-year"><%= @year %>年</span>
+      <%= link_to '翌年 >', events_path(year: @year + 1), class: 'btn btn-outline btn-sm' %>
+    </div>
+    <%= link_to '+ イベントを登録', new_event_path, class: 'btn btn-primary' %>
+  </div>
+
+  <% if @events.empty? %>
+    <div class="empty-state">
+      <p><%= @year %>年に登録されているイベントはありません。</p>
+      <%= link_to '最初のイベントを登録する', new_event_path, class: 'btn btn-primary' %>
+    </div>
+  <% else %>
+    <div class="calendar-timeline">
+      <% (1..12).each do |month| %>
+        <div class="month-section">
+          <div class="month-header <%= month == Date.today.month && @year == Date.today.year ? 'current-month-header' : '' %>">
+            <h2><%= month %>月</h2>
+          </div>
+          <div class="month-events">
+            <% (@events_by_month[month] || []).each do |event| %>
+              <div class="timeline-event event-urgency-<%= event.urgency_level %>">
+                <div class="timeline-date">
+                  <span class="tl-day"><%= event.event_date.day %></span>
+                  <span class="tl-weekday"><%= %w[日 月 火 水 木 金 土][event.event_date.wday] %></span>
+                </div>
+                <div class="timeline-content">
+                  <span class="event-category-tag small"><%= event.category_label %></span>
+                  <%= link_to event.title, event_path(event), class: 'tl-event-title' %>
+                  <% pending = event.tasks.active.count %>
+                  <% if pending > 0 %>
+                    <span class="task-badge">残り<%= pending %>タスク</span>
+                  <% end %>
+                  <span class="event-status-tag status-<%= event.status %>"><%= event.status_label %></span>
+                </div>
+                <div class="timeline-actions">
+                  <%= link_to '詳細', event_path(event), class: 'btn btn-xs btn-detail' %>
+                  <%= link_to '編集', edit_event_path(event), class: 'btn btn-xs btn-outline' %>
+                </div>
+              </div>
+            <% end %>
+            <% if (@events_by_month[month] || []).empty? %>
+              <div class="month-no-events">イベントなし</div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

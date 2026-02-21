@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ChatApp</title>
+    <title>マーケティング秘書</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= yield %>
+    <% if user_signed_in? %>
+    <nav class="global-nav">
+      <div class="nav-brand">
+        <%= link_to 'AIマーケティング秘書', dashboard_path, class: 'nav-logo' %>
+      </div>
+      <div class="nav-links">
+        <%= link_to 'ダッシュボード', dashboard_path, class: "nav-link #{current_page?(dashboard_path) ? 'active' : ''}" %>
+        <%= link_to '年間カレンダー', events_path, class: "nav-link #{current_page?(events_path) ? 'active' : ''}" %>
+        <%= link_to 'チャット', rooms_path, class: "nav-link #{current_page?(rooms_path) ? 'active' : ''}" %>
+      </div>
+      <div class="nav-user">
+        <span class="user-name"><%= current_user.name %></span>
+        <%= link_to 'アカウント設定', edit_user_path(current_user), class: 'nav-link' %>
+        <%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: 'nav-link' %>
+      </div>
+    </nav>
+    <% end %>
+
+    <% if notice %>
+      <div class="flash flash-notice"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="flash flash-alert"><%= alert %></div>
+    <% end %>
+
+    <main class="main-content">
+      <%= yield %>
+    </main>
   </body>
 </html>

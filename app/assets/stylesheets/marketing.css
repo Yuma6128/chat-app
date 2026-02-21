@@ -1,0 +1,656 @@
+/* ========================================
+   AIマーケティング秘書 - スタイルシート
+   ======================================== */
+
+:root {
+  --primary: #4f46e5;
+  --primary-light: #818cf8;
+  --primary-dark: #3730a3;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+}
+
+body {
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ---- グローバルナビ ---- */
+.global-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-logo {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  letter-spacing: -0.3px;
+}
+
+.nav-links { display: flex; gap: 4px; }
+
+.nav-link {
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all .15s;
+}
+.nav-link:hover { color: #fff; background: rgba(255,255,255,.1); }
+.nav-link.active { color: #fff; background: rgba(255,255,255,.2); }
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.user-name {
+  color: rgba(255,255,255,.9);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ---- フラッシュ ---- */
+.flash {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.flash-notice { background: #ecfdf5; color: #065f46; border-bottom: 1px solid #a7f3d0; }
+.flash-alert  { background: #fef2f2; color: #991b1b; border-bottom: 1px solid #fecaca; }
+
+/* ---- メインコンテンツ ---- */
+.main-content { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+
+/* ---- カード ---- */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.card-header h2 { margin: 0; font-size: 17px; font-weight: 600; }
+.card-title { font-size: 17px; font-weight: 600; margin: 0 0 16px; }
+
+/* ---- ボタン ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.btn-primary  { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline  { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+.btn-outline:hover { background: var(--primary); color: #fff; }
+.btn-danger   { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #b91c1c; }
+.btn-complete { background: var(--success); color: #fff; }
+.btn-detail   { background: var(--info); color: #fff; }
+.btn-sm  { padding: 5px 12px; font-size: 13px; }
+.btn-lg  { padding: 12px 24px; font-size: 15px; }
+.btn-xs  { padding: 3px 8px; font-size: 12px; border-radius: 5px; }
+
+/* ---- ダッシュボード ---- */
+.dashboard-container { max-width: 1100px; margin: 0 auto; }
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.dashboard-title h1 { font-size: 24px; font-weight: 700; margin: 0 0 4px; }
+.dashboard-subtitle { color: var(--text-muted); font-size: 14px; margin: 0; }
+.dashboard-actions { display: flex; gap: 8px; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* AI秘書サジェストカード */
+.ai-suggestions {
+  border-left: 4px solid var(--primary);
+  margin-bottom: 20px;
+}
+.ai-suggestions .card-header h2 { color: var(--primary-dark); }
+.ai-icon {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 8px;
+}
+.ai-all-good { border-left-color: var(--success); }
+.all-good-msg { color: var(--success); font-weight: 500; }
+
+.action-list { display: flex; flex-direction: column; gap: 10px; }
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+.action-overdue { background: #fef2f2; }
+.action-urgent  { background: #fffbeb; }
+.action-reminder { background: #eff6ff; }
+
+.action-badge {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge-overdue { background: #fee2e2; color: #991b1b; }
+.badge-urgent  { background: #fef3c7; color: #92400e; }
+.badge-reminder { background: #dbeafe; color: #1e40af; }
+
+.action-message { flex: 1; font-size: 14px; }
+
+/* 直近イベントカード */
+.event-card {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-template-rows: auto auto;
+  gap: 4px 12px;
+}
+.event-card-meta {
+  grid-column: 1;
+  grid-row: 1;
+  text-align: center;
+}
+.event-date { display: block; font-size: 18px; font-weight: 700; line-height: 1.2; }
+
+.event-card-body {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+.event-card-tasks {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.event-title { font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; }
+.event-title:hover { color: var(--primary); }
+
+.event-days-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.days-critical { background: #fee2e2; color: #991b1b; }
+.days-urgent   { background: #fef3c7; color: #92400e; }
+.days-soon     { background: #dbeafe; color: #1e40af; }
+.days-normal   { background: #f1f5f9; color: var(--text-muted); }
+.days-past     { background: #f1f5f9; color: var(--text-muted); }
+
+/* 月別グリッド */
+.monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.month-cell {
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+.month-cell.current-month { border-color: var(--primary); background: #eef2ff; }
+.month-label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+.month-event-count {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.month-empty { color: var(--border); font-size: 13px; }
+
+/* 整理術アドバイス */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.tip-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: var(--bg);
+  border-radius: 8px;
+}
+.tip-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+.tip-body strong { display: block; font-size: 14px; margin-bottom: 4px; }
+.tip-body p { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+/* ---- 年間カレンダー ---- */
+.events-container { max-width: 900px; margin: 0 auto; }
+.events-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.events-header h1 { flex: 1; font-size: 22px; font-weight: 700; margin: 0; }
+.year-nav { display: flex; align-items: center; gap: 8px; }
+.current-year { font-size: 16px; font-weight: 600; min-width: 70px; text-align: center; }
+
+.calendar-timeline { display: flex; flex-direction: column; gap: 0; }
+.month-section { margin-bottom: 16px; }
+.month-header {
+  padding: 8px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px 8px 0 0;
+}
+.month-header h2 { margin: 0; font-size: 15px; font-weight: 600; color: var(--text-muted); }
+.current-month-header { background: #eef2ff; border-color: var(--primary); }
+.current-month-header h2 { color: var(--primary-dark); }
+
+.month-events {
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+.month-no-events {
+  padding: 10px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.timeline-event {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+.timeline-event:last-child { border-bottom: none; }
+.timeline-event:hover { background: var(--bg); }
+
+.timeline-date {
+  flex-shrink: 0;
+  width: 44px;
+  text-align: center;
+}
+.tl-day { display: block; font-size: 20px; font-weight: 700; line-height: 1.2; }
+.tl-weekday { display: block; font-size: 12px; color: var(--text-muted); }
+
+.timeline-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tl-event-title { font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; }
+.tl-event-title:hover { color: var(--primary); }
+
+.timeline-actions { display: flex; gap: 6px; }
+
+/* タスクバッジ */
+.task-badge {
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* カテゴリタグ */
+.event-category-tag {
+  display: inline-block;
+  background: #eef2ff;
+  color: var(--primary-dark);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.event-category-tag.large { font-size: 13px; padding: 4px 10px; }
+.event-category-tag.small { font-size: 11px; padding: 2px 6px; }
+
+/* ステータスタグ */
+.event-status-tag {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.status-upcoming    { background: #dbeafe; color: #1e40af; }
+.status-in_progress { background: #fef3c7; color: #92400e; }
+.status-completed   { background: #ecfdf5; color: #065f46; }
+.status-cancelled   { background: #f1f5f9; color: var(--text-muted); }
+
+/* ---- イベント詳細 ---- */
+.event-detail-container { max-width: 900px; margin: 0 auto; }
+.breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+.breadcrumb a { color: var(--primary); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+.event-detail-header {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.event-detail-meta { display: flex; gap: 8px; margin-bottom: 8px; }
+.event-detail-title { font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+.event-detail-date { font-size: 15px; margin-bottom: 12px; }
+.event-description { color: var(--text-muted); font-size: 14px; margin-bottom: 16px; }
+.event-detail-actions { display: flex; gap: 8px; }
+
+.days-until-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* プログレスバー */
+.progress-section .progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.progress-section h3 { margin: 0; font-size: 15px; }
+.progress-numbers { font-size: 14px; color: var(--text-muted); }
+
+.progress-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar.large { height: 12px; }
+.progress-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 4px;
+  transition: width .4s ease;
+}
+.all-done-msg { color: var(--success); font-weight: 500; margin-top: 8px; font-size: 14px; }
+
+/* タスクグリッド */
+.tasks-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+/* タスクリスト */
+.task-list { list-style: none; padding: 0; margin: 0; }
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.task-item:last-child { border-bottom: none; }
+.task-item.completed { opacity: .6; }
+
+.task-item-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; }
+.task-item-body { flex: 1; }
+.task-title { font-size: 14px; font-weight: 500; display: block; margin-bottom: 4px; }
+.task-title.done { text-decoration: line-through; color: var(--text-muted); }
+.task-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+.task-checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all .15s;
+}
+.task-checkbox:hover { border-color: var(--success); }
+.task-checkbox.checked {
+  background: var(--success);
+  border-color: var(--success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.task-item-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+.priority-badge {
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.priority-1 { background: #fee2e2; color: #991b1b; }
+.priority-2 { background: #fef3c7; color: #92400e; }
+.priority-3 { background: #f1f5f9; color: var(--text-muted); }
+
+.due-date { font-size: 12px; color: var(--text-muted); }
+.due-date.overdue { color: var(--danger); font-weight: 500; }
+
+.auto-tag {
+  background: #eef2ff;
+  color: var(--primary);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+/* タスク追加フォーム */
+.new-task-form {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.new-task-form.hidden { display: none; }
+
+/* タスク進捗（イベントカード内） */
+.task-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.task-progress .progress-bar { flex: 1; height: 6px; }
+.progress-label { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+/* ---- フォーム ---- */
+.form-container { max-width: 640px; margin: 0 auto; }
+.form-header { margin-bottom: 24px; }
+.form-header h1 { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+.form-header p { color: var(--text-muted); margin: 0; font-size: 14px; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  background: #fff;
+  transition: border-color .15s;
+}
+.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,.1); }
+textarea.form-control { resize: vertical; }
+
+.form-actions { display: flex; gap: 12px; margin-top: 24px; }
+.alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #991b1b;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* AI自動タスクオプション */
+.auto-task-option {
+  background: #eef2ff;
+  border: 1px solid var(--primary-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.checkbox-label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.checkbox-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+.checkbox-text small { color: var(--text-muted); font-size: 12px; }
+
+.task-preview-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.task-preview-card h3 { font-size: 14px; font-weight: 600; margin: 0 0 10px; }
+.preview-placeholder { color: var(--text-muted); font-size: 13px; margin: 0; }
+.preview-task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.preview-task-list li {
+  font-size: 13px;
+  padding: 4px 8px;
+  background: #fff;
+  border-radius: 4px;
+  border-left: 3px solid var(--primary);
+  color: var(--text);
+}
+
+/* empty state */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.empty-msg { color: var(--text-muted); font-size: 14px; text-align: center; padding: 16px 0; }
+.see-all-link {
+  display: block;
+  text-align: right;
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  margin-top: 8px;
+}
+.see-all-link:hover { text-decoration: underline; }
+
+/* urgency colors for event cards */
+.event-urgency-critical { border-left: 3px solid var(--danger); }
+.event-urgency-urgent   { border-left: 3px solid var(--warning); }
+.event-urgency-soon     { border-left: 3px solid var(--info); }
+.event-urgency-normal   { border-left: 3px solid var(--border); }
+.event-urgency-past     { border-left: 3px solid var(--border); opacity: .75; }
+
+/* urgency for task items */
+.urgency-overdue { background: #fef2f2; }
+.urgency-critical { background: #fff7ed; }
+.urgency-urgent   { background: #fffbeb; }
+
+/* completed tasks section */
+.completed-tasks-section { opacity: .8; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-header { flex-direction: column; gap: 12px; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .tips-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .events-header { flex-wrap: wrap; }
+  .global-nav { padding: 0 12px; }
+  .nav-links .nav-link { padding: 6px 10px; }
+}
